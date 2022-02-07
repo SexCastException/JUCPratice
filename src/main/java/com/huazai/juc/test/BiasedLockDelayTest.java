@@ -12,15 +12,34 @@ import java.util.concurrent.TimeUnit;
  *
  * 3、如果没有开启偏向锁，那么对象创建后，markword 值为 0x01 即最后 3 位为 001，这时它的 hashcode、age 都为 0，
  *    第一次用到 hashcode 时才会赋值，hashcode赋值后会禁用偏向锁，因为Mark Word记录了31位的hashcode，没有多余的空间记录54位的thread
+ *
+ * 4、-XX:-UseBiasedLocking：禁用偏向锁
+ *
+ * 5、偏向锁匙对轻量级锁的一种优化，自旋锁是对重量级锁的一种优化
  */
 @Slf4j
 public class BiasedLockDelayTest {
     public static void main(String[] args) throws InterruptedException {
         Dog dog = new Dog();
-        log.debug(ClassLayout.parseInstance(dog).toPrintable());
-        TimeUnit.SECONDS.sleep(4);
-        log.debug(ClassLayout.parseInstance(dog).toPrintable(dog));
+//        dog.hashCode();  // 生成hashcode禁用偏向锁
+
+        new Thread(() -> {
+            log.debug("synchronized 前");
+            System.out.println(ClassLayout.parseInstance(dog).toPrintable());
+            synchronized (dog) {
+                log.debug("synchronized 中");
+                System.out.println(ClassLayout.parseInstance(dog).toPrintable());
+            }
+            log.debug("synchronized 后");
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(ClassLayout.parseInstance(dog).toPrintable());
+        }, "t1").start();
     }
+
 }
 
 class Dog{
