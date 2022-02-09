@@ -2,6 +2,8 @@ package com.huazai.juc.test;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.locks.LockSupport;
+
 @Slf4j
 public class ThreadStateTest {
     public static void main(String[] args) throws InterruptedException {
@@ -64,6 +66,15 @@ public class ThreadStateTest {
         });
         thread7.start();
 
+        Thread thread8 = new Thread(() -> {
+//            LockSupport.park(); // WAITING
+            // parkNanos(n)：让当前线程等待n纳秒后重新运行
+//            LockSupport.parkNanos(999999999999999l);  // TIMED_WAITING
+            // parkUntil(n)：让当前线程等待到具体某个时间点
+            LockSupport.parkUntil(99999999 + System.currentTimeMillis());   // TIMED_WAITING
+        });
+        thread8.start();
+
         Thread.sleep(500);
         log.debug("thread1线程状态：{}", thread1.getState());
         log.debug("thread2线程状态：{}", thread2.getState());
@@ -71,5 +82,7 @@ public class ThreadStateTest {
         log.debug("thread4线程状态：{}", thread4.getState());
         log.debug("thread5线程状态：{}", thread5.getState());
         log.debug("thread6线程状态：{}", thread6.getState());
+        log.debug("thread7线程状态：{}", thread7.getState());
+        log.debug("thread8线程状态：{}", thread8.getState());
     }
 }
