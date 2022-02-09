@@ -33,7 +33,9 @@ public class ThreadStateTest {
         Thread thread5 = new Thread(() -> {
             try {
                 synchronized (ThreadStateTest.class) {
-                    Thread.sleep(999999999);
+                    ThreadStateTest.class.wait();   // WAITING
+                    ThreadStateTest.class.wait(9999999);   // TIMED_WAITING
+                    Thread.sleep(999999999);  // TIMED_WAITING
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
