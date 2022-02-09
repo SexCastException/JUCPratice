@@ -6,6 +6,23 @@ import lombok.extern.slf4j.Slf4j;
 public class GuardedObject {
     private Object result;
 
+    private Integer id;
+
+    public GuardedObject() {
+    }
+
+    public GuardedObject(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     private final Object lock = new Object();
 
     public Object getResult(final long millis) throws InterruptedException {
