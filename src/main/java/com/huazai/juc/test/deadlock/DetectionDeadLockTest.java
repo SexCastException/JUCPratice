@@ -9,6 +9,9 @@ import java.util.concurrent.TimeUnit;
  * 1、使用jconsole工具
  * 2、使用jps获取定位的进行UID，再执行 jstack UID
  *
+ * 解决方案：
+ * 1、改变加锁顺序，线程A和线程B分别都先获取a对象的monitor对象再获取b对象锁，缺点造成线程饥饿问题
+ * 2、使用ReentrantLock
  */
 @Slf4j
 public class DetectionDeadLockTest {

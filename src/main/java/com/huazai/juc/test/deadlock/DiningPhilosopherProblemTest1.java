@@ -2,17 +2,19 @@ package com.huazai.juc.test.deadlock;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * 哲学家就餐问题（死锁）
- *
+ * <p>
  * 解决方案：
  * 1、改变加锁顺序，线程A和线程B分别都先获取a对象的monitor对象再获取b对象锁，缺点造成线程饥饿问题
  * 2、使用ReentrantLock
  */
 @Slf4j
-public class DiningPhilosopherProblemTest {
+public class DiningPhilosopherProblemTest1 {
     public static void main(String[] args) {
-        DiningPhilosopherProblemTest diningPhilosopherProblemTest = new DiningPhilosopherProblemTest();
+        DiningPhilosopherProblemTest1 diningPhilosopherProblemTest = new DiningPhilosopherProblemTest1();
         Chopstick c1 = diningPhilosopherProblemTest.new Chopstick("1");
         Chopstick c2 = diningPhilosopherProblemTest.new Chopstick("2");
         Chopstick c3 = diningPhilosopherProblemTest.new Chopstick("3");
@@ -22,9 +24,7 @@ public class DiningPhilosopherProblemTest {
         diningPhilosopherProblemTest.new Philosopher("柏拉图", c2, c3).start();
         diningPhilosopherProblemTest.new Philosopher("亚里士多德", c3, c4).start();
         diningPhilosopherProblemTest.new Philosopher("赫拉克利特", c4, c5).start();
-//        diningPhilosopherProblemTest.new Philosopher("阿基米德", c5, c1).start();
-        // 改变加锁顺序，打破获取锁的一个闭环条件
-        diningPhilosopherProblemTest.new Philosopher("阿基米德", c1, c5).start();
+        diningPhilosopherProblemTest.new Philosopher("阿基米德", c5, c1).start();
     }
 
     class Philosopher extends Thread {
@@ -49,16 +49,19 @@ public class DiningPhilosopherProblemTest {
         @Override
         public void run() {
             while (true) {
-                // 获得左手筷子
-                synchronized (left) {
-                    // 获得右手筷子
-                    synchronized (right) {
-                        // 吃饭
-                        eat();
+                if (left.tryLock()) {
+                    try {
+                        if (right.tryLock()) {
+                            try {
+                                eat();
+                            } finally {
+                                right.unlock();
+                            }
+                        }
+                    } finally {
+                        left.unlock();
                     }
-                    // 放下右手筷子
                 }
-                // 放下左手筷子
             }
         }
     }
@@ -66,7 +69,7 @@ public class DiningPhilosopherProblemTest {
     /**
      * 筷子类
      */
-    class Chopstick {
+    class Chopstick extends ReentrantLock {
         String name;
 
         public Chopstick(String name) {
