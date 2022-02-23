@@ -65,6 +65,10 @@ public class VisibilityTest2 {
 
     @Actor
     public void actor2(CResult r) {
+        /*
+         此处赋值可能发生指令重排序，ready变量比num先赋值，num还没来得及赋值，此时发生线程上下文切换，
+         其他线程执行actor1，执行r.r1 = num + num;代码，此时r.r1=0
+         */
         num = 2;
         ready = true;
     }
