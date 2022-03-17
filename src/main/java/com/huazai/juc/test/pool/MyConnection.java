@@ -1,4 +1,4 @@
-package com.huazai.juc.test.immutable;
+package com.huazai.juc.test.pool;
 
 import java.sql.*;
 import java.util.Map;

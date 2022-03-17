@@ -1,4 +1,4 @@
-package com.huazai.juc.test.immutable;
+package com.huazai.juc.test.pool;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,18 +12,18 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
  * @className Pool
  */
 @Slf4j
-public class Pool {
+public class ConnectionPool {
     public static void main(String[] args) {
-        Pool pool = new Pool(3);
+        ConnectionPool connectionPool = new ConnectionPool(3);
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
-                Connection connection = pool.borrow();
+                Connection connection = connectionPool.borrow();
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                pool.release(connection);
+                connectionPool.release(connection);
             }, "t" + i).start();
         }
     }
@@ -37,7 +37,7 @@ public class Pool {
      */
     private AtomicIntegerArray status;
 
-    public Pool(int poolSize) {
+    public ConnectionPool(int poolSize) {
         this.poolSize = poolSize;
         connections = new Connection[poolSize];
         status = new AtomicIntegerArray(poolSize);
