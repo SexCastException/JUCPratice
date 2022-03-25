@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author pyh
@@ -14,10 +15,18 @@ import java.util.Set;
 @Slf4j
 public class MyThreadPool {
     public static void main(String[] args) {
-        MyThreadPool myThreadPool = new MyThreadPool(3);
-        for (int i = 0; i < 10; i++) {
+        MyThreadPool myThreadPool = new MyThreadPool(3, (queue, runnable) -> {
+            System.out.println("使用拒绝策略处理无法执行的线程");
+            new Thread(runnable).start();
+        });
+        for (int i = 0; i < 100; i++) {
             int j = i;
             myThreadPool.execute(() -> {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 log.debug("执行任务" + j);
             });
         }
@@ -51,7 +60,7 @@ public class MyThreadPool {
                 worker.start();
             } else {
                 log.debug("没有空闲线程，尝试将任务加入队列");
-                boolean flag = runnableBlockingQueue.offer(runnable);
+                boolean flag = runnableBlockingQueue.offer(runnable, 1, TimeUnit.SECONDS);
                 if (flag) {
                     log.debug("加入任务队列成功");
                 } else {
