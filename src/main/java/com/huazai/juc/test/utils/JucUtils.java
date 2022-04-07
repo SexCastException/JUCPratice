@@ -16,4 +16,12 @@ public class JucUtils {
             e.printStackTrace();
         }
     }
+
+    public static void sleep(int time, TimeUnit timeUnit) {
+        try {
+            timeUnit.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
