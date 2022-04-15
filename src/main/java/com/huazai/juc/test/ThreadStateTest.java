@@ -35,8 +35,8 @@ public class ThreadStateTest {
         Thread thread5 = new Thread(() -> {
             try {
                 synchronized (ThreadStateTest.class) {
-                    ThreadStateTest.class.wait();   // WAITING
-                    ThreadStateTest.class.wait(9999999);   // TIMED_WAITING
+//                    ThreadStateTest.class.wait();   // WAITING
+//                    ThreadStateTest.class.wait(9999999);   // TIMED_WAITING
                     Thread.sleep(999999999);  // TIMED_WAITING
                 }
             } catch (InterruptedException e) {
@@ -49,10 +49,10 @@ public class ThreadStateTest {
 
         Thread thread6 = new Thread(() -> {
             try {
+                // 线程5获取锁之后一直不释放，当前线程拿不到锁，处于BLOCKED状态
                 synchronized (ThreadStateTest.class) {
-                    Thread.sleep(999999999);
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

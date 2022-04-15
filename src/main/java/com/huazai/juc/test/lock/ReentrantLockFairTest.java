@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * ReentrantLock第四特性：公平性
- * ReentrantLock和synchronized默认伟非公平锁，但是ReentrantLock可以设置为非公平锁
+ * ReentrantLock和synchronized默认为非公平锁，但是ReentrantLock可以设置为非公平锁
  */
 @Slf4j
 public class ReentrantLockFairTest {
