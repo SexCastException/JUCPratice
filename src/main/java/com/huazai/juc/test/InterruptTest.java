@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 先打断子线程，然后再睡眠，睡眠时抛出异常，打断标志为：false
+ * 优雅的让子线程睡眠期间被打断后优雅的结束任务
  */
 @Slf4j
 public class InterruptTest {
@@ -22,22 +22,22 @@ public class InterruptTest {
                     log.debug("子线程判断自己是否被打断，{}", Thread.currentThread().isInterrupted());
                     log.debug("子线程开始睡眠");
                     TimeUnit.SECONDS.sleep(10);
+                    log.debug("子线程结束睡眠");
                 } catch (InterruptedException e) {
-                    log.debug("子线程睡眠被打断");
-                    log.debug("子线程睡眠被打断后判断打断标志状态，{}", Thread.currentThread().isInterrupted());
-                    // 睡眠时抛出被打断异常，重置打断标志，让代码能子线程能优雅的结束
-                    log.debug("重置子线程打断标志");
+                    log.debug("子线程睡眠被打断后自动重置打断状态，打断状态为：{}", Thread.currentThread().isInterrupted());
+                    // 子线程睡眠时抛出被打断异常，重置打断标志，为了让代码能子线程能优雅的结束，子线程自行打断自己，下一层循环判断被打断了则退出循环
+                    log.debug("子线程自行打断自己");
                     Thread.currentThread().interrupt();
-                    log.debug("重置标志后判断子线程是否被打断，{}", Thread.currentThread().isInterrupted());
-                    e.printStackTrace();
+                    log.debug("子线程自行打断自己后打断标志为：{}", Thread.currentThread().isInterrupted());
+//                    e.printStackTrace();
                 }
             }
         });
-       thread.start();
-       TimeUnit.SECONDS.sleep(2);
-       log.debug("开始打断子线程");
-       thread.interrupt();
+        thread.start();
+        TimeUnit.SECONDS.sleep(2);
+        log.debug("主线程开始打断子线程");
+        thread.interrupt();
         TimeUnit.SECONDS.sleep(5);
-       log.debug("子线程打断状态：{}", thread.isInterrupted());
+        log.debug("主线程查看子线程打断状态：{}", thread.isInterrupted());
     }
 }
