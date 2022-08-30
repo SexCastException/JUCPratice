@@ -44,7 +44,7 @@ public class ParkTest {
      */
     private static void resetInterruptedBySleep() {
         log.debug("sleep，wait等阻塞api，不管是先阻塞后打断，还是先打断后阻塞，只要阻塞期间清空标志为true，都会抛出异常");
-        JucUtils.sleepSecond(1);
+        JucUtils.sleepSecond(90000000);
         log.debug("阻塞被打断后，重置打断标志，打断状态：{}", Thread.currentThread().isInterrupted());
     }
 
