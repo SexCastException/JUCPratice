@@ -25,7 +25,7 @@ public class ParkTest {
             log.debug("Thread.interrupted()会重置打断标志，打断状态：{}", Thread.interrupted());   // Thread.interrupted()会重置打断标志，导致第二次park时候堵塞
             log.debug("第三次park开始，打断状态：{}", Thread.currentThread().isInterrupted());
             LockSupport.park();
-            log.debug("第二次park结束...");
+            log.debug("第三次park结束...");
         }, "t1");
         t1.start();
         Thread.sleep(2000);
