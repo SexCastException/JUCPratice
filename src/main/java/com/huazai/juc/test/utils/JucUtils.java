@@ -13,7 +13,7 @@ public class JucUtils {
         try {
             TimeUnit.SECONDS.sleep(seconds);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
