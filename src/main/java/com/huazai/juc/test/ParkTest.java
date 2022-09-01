@@ -2,6 +2,7 @@ package com.huazai.juc.test;
 
 import com.huazai.juc.test.utils.JucUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 
 import java.util.concurrent.locks.LockSupport;
 
@@ -50,5 +51,38 @@ public class ParkTest {
 
     private static void resetInterrupted() {
         log.debug("Thread.interrupted()会重置打断标志，打断状态：{}", Thread.interrupted());   // Thread.interrupted()会重置打断标志
+    }
+
+    /**
+     * 测试 LockSupport 先park后unpark，或者先unpark后park的效果
+     */
+    @Test
+    public void testUnparkThenPark() throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            JucUtils.sleepSecond(1);
+            log.debug("t1 park start...");
+            LockSupport.park();
+            log.debug("t1 park end...");
+        });
+        t1.start();
+        log.error("unpark t1 by main");
+        LockSupport.unpark(t1);
+        t1.join();
+        log.error("main over!");
+    }
+
+    @Test
+    public void testParkThenUnpark() throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            log.debug("t1 park start...");
+            LockSupport.park();
+            log.debug("t1 park end...");
+        });
+        t1.start();
+        JucUtils.sleepSecond(1);
+        log.error("unpark t1 by main");
+        LockSupport.unpark(t1);
+        t1.join();
+        log.error("main over!");
     }
 }
