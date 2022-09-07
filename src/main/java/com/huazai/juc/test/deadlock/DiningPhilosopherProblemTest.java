@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
  * 哲学家就餐问题（死锁）
  *
  * 解决方案：
- * 1、改变加锁顺序，线程A和线程B分别都先获取a对象的monitor对象再获取b对象锁，缺点造成线程饥饿问题
+ * 1、改变加锁顺序，打破死锁的条件，线程A和线程B分别都先获取a对象的monitor对象再获取b对象锁，缺点造成线程饥饿问题
  * 2、使用ReentrantLock
  */
 @Slf4j
@@ -28,8 +28,8 @@ public class DiningPhilosopherProblemTest {
     }
 
     class Philosopher extends Thread {
-        Chopstick left;
-        Chopstick right;
+        final Chopstick left;
+        final Chopstick right;
 
         public Philosopher(String name, Chopstick left, Chopstick right) {
             super(name);
@@ -38,7 +38,7 @@ public class DiningPhilosopherProblemTest {
         }
 
         private void eat() {
-            log.debug("eating...");
+            log.debug(this.getName() + " eating...");
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

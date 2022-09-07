@@ -25,8 +25,8 @@ public class ReentrantReadWriteLockTest {
 
     public static void main(String[] args) throws InterruptedException {
         ReentrantReadWriteLockTest reentrantReadWriteLockTest = new ReentrantReadWriteLockTest();
-        readAndWriteTest(reentrantReadWriteLockTest);
-        readAndReadTest(reentrantReadWriteLockTest);
+//        readAndWriteTest(reentrantReadWriteLockTest);
+//        readAndReadTest(reentrantReadWriteLockTest);
         writeAndWriteTest(reentrantReadWriteLockTest);
 
 
@@ -69,27 +69,27 @@ public class ReentrantReadWriteLockTest {
     }
 
     private Object read() {
-        log.debug("获取读锁中...");
+        log.debug(Thread.currentThread().getName() + "-获取读锁中...");
         readLock.lock();
         try {
-            log.debug("开始读取数据：{}", data);
+            log.debug(Thread.currentThread().getName() + "-开始读取数据：{}", data);
             JucUtils.sleepSecond(1);
         } finally {
-            log.debug("读取数据完毕，释放读锁");
+            log.debug(Thread.currentThread().getName() + "-读取数据完毕，释放读锁");
             readLock.unlock();
         }
         return data;
     }
 
     private void write(Object data) {
-        log.debug("获取写锁中...");
+        log.debug(Thread.currentThread().getName() + "-获取写锁中...");
         writeLock.lock();
         try {
-            log.debug("开始写入数据");
+            log.debug(Thread.currentThread().getName() + "-开始写入数据");
             this.data = data;
             JucUtils.sleepSecond(1);
         } finally {
-            log.debug("写入数据完毕，释放写锁");
+            log.debug(Thread.currentThread().getName() + "-写入数据完毕，释放写锁");
             writeLock.unlock();
         }
     }

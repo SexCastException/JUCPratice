@@ -18,11 +18,11 @@ import java.util.concurrent.locks.StampedLock;
 public class StampedLockTest {
     public static void main(String[] args) throws InterruptedException {
         StampedLockTest stampedLockTest = new StampedLockTest(1);
-//        readAndRead(stampedLockTest);
+        readAndRead(stampedLockTest);
 //        writeAndRead(stampedLockTest);
 //        readAndWrite(stampedLockTest);
 //        writeAndWrite(stampedLockTest);
-        nonReentrant();
+//        nonReentrant();
     }
 
     /**

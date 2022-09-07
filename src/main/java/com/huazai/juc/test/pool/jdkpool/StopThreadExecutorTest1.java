@@ -42,6 +42,10 @@ public class StopThreadExecutorTest1 {
             log.debug("task 3");
         });
         List<Runnable> runnables = executorService.shutdownNow();
+        for (Runnable runnable : runnables) {
+            new Thread(runnable).start();
+        }
         log.debug(runnables.toString());
     }
+
 }

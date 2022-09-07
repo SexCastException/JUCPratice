@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class ReentrantLockFairTest {
     public static void main(String[] args) throws InterruptedException {
-        ReentrantLock lock = new ReentrantLock(true);
+        ReentrantLock lock = new ReentrantLock(false);
         lock.lock();
         for (int i = 0; i < 100; i++) {
             new Thread(() -> {

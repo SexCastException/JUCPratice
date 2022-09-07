@@ -20,7 +20,7 @@ public class ABAProblemTest {
     public static void main(String[] args) throws InterruptedException {
         log.debug("main start...");
         // 获取值 A
-        // 这个共享变量被它线程修改过？
+        // 这个共享变量被其他线程修改过？
         String prev = ref.get();
         other();
         TimeUnit.SECONDS.sleep(1);

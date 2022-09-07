@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
 /**
+ * 和AtomicStampedRefrerence类似，AtomicMarkableReference也能感知原子引用修改之前是否被其他线程修改过。
+ * 但是AtomicStampedRefrerence还能感知被修改过几次。
+ *
  * @author pyh
  * @datetime 2022/3/6 12:29
  * @description
@@ -14,6 +17,7 @@ import java.util.concurrent.atomic.AtomicMarkableReference;
 @Slf4j
 public class AtomicMarkableReferenceTest {
     static AtomicMarkableReference<String> ref = new AtomicMarkableReference<>("A", true);
+
     public static void main(String[] args) throws InterruptedException {
         log.debug("main start...");
         // 获取值 A

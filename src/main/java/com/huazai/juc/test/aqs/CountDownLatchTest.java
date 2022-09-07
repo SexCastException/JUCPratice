@@ -18,19 +18,19 @@ public class CountDownLatchTest {
     public static void main(String[] args) throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(3);
         new Thread(() -> {
-            log.debug("begin...");
+            log.debug("begin...{}", latch.getCount());
             JucUtils.sleepSecond(1);
             latch.countDown();
             log.debug("end...{}", latch.getCount());
         }).start();
         new Thread(() -> {
-            log.debug("begin...");
+            log.debug("begin...{}", latch.getCount());
             JucUtils.sleepSecond(2);
             latch.countDown();
             log.debug("end...{}", latch.getCount());
         }).start();
         new Thread(() -> {
-            log.debug("begin...");
+            log.debug("begin...{}", latch.getCount());
             JucUtils.sleepSecond(1);
             latch.countDown();
             log.debug("end...{}", latch.getCount());

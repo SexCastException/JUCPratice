@@ -55,5 +55,8 @@ public class HungryThreadPollResoleTest {
         JucUtils.sleepSecond(8);
         log.debug(chaocaiExecutor.isShutdown() + "");
         log.debug(chaocaiExecutor.isTerminated() + "");
+
+        diancanExecutor.shutdown();
+        chaocaiExecutor.shutdown();
     }
 }

@@ -3,10 +3,11 @@ package com.huazai.juc.test.atomic;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
+ * AtomicStampedReference 可以给原子引用加上版本号，能感知原子引用变化了几次，可以有效地防止ABA问题。
+ *
  * @author pyh
  * @datetime 2022/3/6 11:00
  * @description
